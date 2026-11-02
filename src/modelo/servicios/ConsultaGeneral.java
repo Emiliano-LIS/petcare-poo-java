@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  */
 public class ConsultaGeneral extends Servicio implements Facturable {
     /**
-     * Se usa java.math.BigDecimal debido a que es más fácil manipularlo que un double (Es un tema de precisión, big decimal permite representarlos exactamente)
+     * BigDecimal conserva la precisión decimal de los importes monetarios.
      */
     private BigDecimal tarifaBase;
 
@@ -19,7 +19,7 @@ public class ConsultaGeneral extends Servicio implements Facturable {
      */
     public ConsultaGeneral(BigDecimal tarifaBase) {
         super("Consulta general");
-        this.tarifaBase = tarifaBase;
+        this.tarifaBase = validarImporte(tarifaBase, "La tarifa base");
     }
 
     /**
@@ -35,22 +35,16 @@ public class ConsultaGeneral extends Servicio implements Facturable {
      * @param tarifaBase tarifa no negativa
      */
     public void setTarifaBase(BigDecimal tarifaBase) {
-        if (tarifaBase.compareTo(BigDecimal.ZERO) <= 0) {
-            /**
-             * Aquí se uso el throw para tirar un error a consola de que no se puede asignar una tarifa base negativa o en cero.
-             * */
-            throw new IllegalArgumentException( "La tarifa base debe ser mayor a cero.");
-        }
-        this.tarifaBase = tarifaBase;
+        this.tarifaBase = validarImporte(tarifaBase, "La tarifa base");
     }
 
     /**
-     * Calcula el costo con la tarifa base.
+     * Devuelve la tarifa base redondeada a dos decimales con HALF_UP.
      * @return costo de la consulta
      */
     @Override
     public BigDecimal calcularCosto() {
-        return tarifaBase;
+        return redondearCosto(tarifaBase);
     }
 
     /**

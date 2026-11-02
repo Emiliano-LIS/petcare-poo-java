@@ -80,8 +80,7 @@ public class Dueno extends Persona {
      */
     @Override
     public String describirRol() {
-        System.out.println("El rol dueño es una persona responsable de una o más mascotas");
-        return null;
+        return "El dueño es responsable de una o más mascotas.";
     }
 
     /**

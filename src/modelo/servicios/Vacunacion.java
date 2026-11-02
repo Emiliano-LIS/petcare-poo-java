@@ -18,8 +18,8 @@ public class Vacunacion extends Servicio implements Facturable {
      */
     public Vacunacion(BigDecimal costoVacuna, BigDecimal tarifaAplicacion) {
         super("Vacunación");
-        this.costoVacuna = costoVacuna;
-        this.tarifaAplicacion = tarifaAplicacion;
+        this.costoVacuna = validarImporte(costoVacuna, "El costo de la vacuna");
+        this.tarifaAplicacion = validarImporte(tarifaAplicacion, "La tarifa de aplicación");
     }
 
     /**
@@ -35,7 +35,7 @@ public class Vacunacion extends Servicio implements Facturable {
      * @param costoVacuna costo no negativo
      */
     public void setCostoVacuna(BigDecimal costoVacuna) {
-        this.costoVacuna = costoVacuna;
+        this.costoVacuna = validarImporte(costoVacuna, "El costo de la vacuna");
     }
 
     /**
@@ -51,16 +51,16 @@ public class Vacunacion extends Servicio implements Facturable {
      * @param tarifaAplicacion tarifa no negativa
      */
     public void setTarifaAplicacion(BigDecimal tarifaAplicacion) {
-        this.tarifaAplicacion = tarifaAplicacion;
+        this.tarifaAplicacion = validarImporte(tarifaAplicacion, "La tarifa de aplicación");
     }
 
     /**
-     * Suma el costo de la vacuna y su aplicación.
+     * Suma vacuna y aplicación; redondea el resultado a dos decimales con HALF_UP.
      * @return costo de la vacunación
      */
     @Override
     public BigDecimal calcularCosto() {
-        return costoVacuna.add(tarifaAplicacion);
+        return redondearCosto(costoVacuna.add(tarifaAplicacion));
     }
 
     /**

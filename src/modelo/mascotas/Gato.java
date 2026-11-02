@@ -43,7 +43,7 @@ public class Gato extends Mascota {
      */
     @Override
     public String hacerSonido() {
-        return null;
+        return "Miau";
     }
 
     /**

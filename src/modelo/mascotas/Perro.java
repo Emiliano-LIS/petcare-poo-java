@@ -63,7 +63,7 @@ public class Perro extends Mascota {
      */
     @Override
     public String hacerSonido() {
-        return null;
+        return "Guau";
     }
 
     /**

@@ -1,6 +1,7 @@
 package modelo.personas;
 
 import modelo.clinica.Cita;
+import modelo.clinica.Clinica;
 
 /**
  * Recepcionista que registra las citas.
@@ -42,10 +43,20 @@ public class Recepcionista extends Persona {
     }
 
     /**
-     * Registra una cita.
+     * Registra una cita en la clínica, respetando las comprobaciones de su agenda.
      * @param cita cita a registrar
+     * @param clinica clínica que administra la agenda
      */
-    public void registrarCita(Cita cita) {
+    public void registrarCita(Cita cita, Clinica clinica) {
+        if (cita == null || clinica == null) {
+            throw new IllegalArgumentException("La cita y la clínica son obligatorias.");
+        }
+        if (cita.getVeterinario() == null || cita.getFechaHora() == null
+                || cita.getMascota() == null || cita.getServicio() == null
+                || cita.getConsultorio() == null) {
+            throw new IllegalArgumentException("La cita debe tener todos sus datos de atención.");
+        }
+        clinica.agendarCita(cita);
     }
 
     /**
@@ -54,8 +65,7 @@ public class Recepcionista extends Persona {
      */
     @Override
     public String describirRol() {
-        System.out.println("El rol recepcionista es una persona responsable gestionar el registro y agenda de citas.");
-        return null;
+        return "El recepcionista es responsable de gestionar el registro y la agenda de citas.";
     }
 
     /**

@@ -15,7 +15,6 @@ public abstract class Mascota {
     private int edad;
     private double peso;
     private Dueno dueno;
-    private String sonido;
     private HistorialClinico historial;
 
     /**
@@ -27,11 +26,9 @@ public abstract class Mascota {
      */
     public Mascota(String nombre, int edad, double peso, Dueno dueno) {
         this.nombre = nombre;
-        /**
-         * En vez de usar this.edad = edad se uso el metodo ya construido y con validación de <= 0 para validar que no se coloque nada fuera de las reglas establecidas.
-         */
-        setEdad(edad);
-        setPeso(peso);
+        // Se reutiliza la validación sin llamar métodos sobreescribibles durante la construcción.
+        this.edad = validarEdad(edad);
+        this.peso = validarPeso(peso);
         this.dueno = dueno;
         // El historial es propio de esta mascota; no se comparte.
         this.historial = new HistorialClinico();
@@ -66,13 +63,7 @@ public abstract class Mascota {
      * @param edad edad mayor que cero
      */
     public void setEdad(int edad) {
-        if (edad <= 0) {
-            /**
-            * Aquí se uso el throw para tirar un error a consola de que no se puede asignar una edad negativa o en cero.
-            * */
-            throw new IllegalArgumentException( "La edad debe ser mayor a cero.");
-        }
-        this.edad = edad;
+        this.edad = validarEdad(edad);
     }
 
     /**
@@ -85,16 +76,24 @@ public abstract class Mascota {
 
     /**
      * Cambia el peso.
-     * @param peso peso mayor que cero
+     * @param peso peso finito mayor que cero
      */
     public void setPeso(double peso) {
-        if (peso <= 0) {
-            /**
-             * Aquí se uso el throw para tirar un error a consola de que no se puede asignar un peso negativo o en cero.
-             * */
-            throw new IllegalArgumentException( "El peso debe ser mayor a cero.");
+        this.peso = validarPeso(peso);
+    }
+
+    private static int validarEdad(int edad) {
+        if (edad <= 0) {
+            throw new IllegalArgumentException("La edad debe ser mayor que cero.");
         }
-        this.peso = peso;
+        return edad;
+    }
+
+    private static double validarPeso(double peso) {
+        if (!Double.isFinite(peso) || peso <= 0) {
+            throw new IllegalArgumentException("El peso debe ser finito y mayor que cero.");
+        }
+        return peso;
     }
 
     /**

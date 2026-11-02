@@ -43,7 +43,7 @@ public class AveExotica extends Mascota {
      */
     @Override
     public String hacerSonido() {
-        return null;
+        return "Pío";
     }
 
     /**

@@ -143,19 +143,22 @@ public class Clinica {
     }
 
     /**
-     * Comprueba si el veterinario está disponible.
+     * Comprueba si el veterinario tiene citas programadas en el horario solicitado.
      * @param veterinario veterinario a consultar
      * @param fechaHora horario propuesto
      * @return {@code true} si el horario está disponible
      */
     public boolean validarDisponibilidad(Veterinario veterinario, LocalDateTime fechaHora) {
-        for(Cita cita : citas){
-            if(cita.getVeterinario() == veterinario && cita.getFechaHora() == fechaHora){
-                System.out.println("El horario se encuentra ocupado.");
+        if (veterinario == null || fechaHora == null) {
+            throw new IllegalArgumentException("El veterinario y el horario son obligatorios.");
+        }
+        for (Cita cita : citas) {
+            if (cita.getEstado() == EstadoCita.PROGRAMADA
+                    && veterinario.equals(cita.getVeterinario())
+                    && fechaHora.equals(cita.getFechaHora())) {
                 return false;
             }
         }
-        System.out.println("El horario se encuentra libre.");
         return true;
     }
 
