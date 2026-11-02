@@ -81,7 +81,9 @@ public class Clinica {
      * @return consultorio creado
      */
     public Consultorio crearConsultorio(int numero) {
-        return null;
+        Consultorio consultorioNuevo = new Consultorio(numero);
+        consultorios.add(consultorioNuevo);
+        return consultorioNuevo;
     }
 
     /**
@@ -89,13 +91,37 @@ public class Clinica {
      * @param veterinario veterinario ya creado
      */
     public void agregarVeterinario(Veterinario veterinario) {
+        for(Veterinario vet : veterinarios){
+            if(vet==veterinario){
+                System.out.println("El registro de este veterinario ya existe");
+                return;
+            }
+        }
+        System.out.println("Registro agregado correctamente");
+        veterinarios.add(veterinario);
     }
 
     /**
      * Agenda una cita si hay disponibilidad.
-     * @param cita cita a agendar
+     * @param citaAgendar cita a agendar
      */
-    public void agendarCita(Cita cita) {
+    public void agendarCita(Cita citaAgendar) {
+        if (!validarDisponibilidad(citaAgendar.getVeterinario(), citaAgendar.getFechaHora())) {
+            System.out.println("El veterinario no esta disponible en este horario");
+            return;
+        }
+
+        for (Cita cita : citas) {
+            if (cita.getEstado() != EstadoCita.CANCELADA
+                    && cita.getConsultorio() == citaAgendar.getConsultorio()
+                    && cita.getFechaHora().equals(citaAgendar.getFechaHora())) {
+                System.out.println("El consultorio está ocupado en ese horario");
+                return;
+            }
+        }
+
+        citas.add(citaAgendar);
+
     }
 
     /**
@@ -123,7 +149,14 @@ public class Clinica {
      * @return {@code true} si el horario está disponible
      */
     public boolean validarDisponibilidad(Veterinario veterinario, LocalDateTime fechaHora) {
-        return false;
+        for(Cita cita : citas){
+            if(cita.getVeterinario() == veterinario && cita.getFechaHora() == fechaHora){
+                System.out.println("El horario se encuentra ocupado.");
+                return false;
+            }
+        }
+        System.out.println("El horario se encuentra libre.");
+        return true;
     }
 
     /**
