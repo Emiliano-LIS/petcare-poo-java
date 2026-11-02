@@ -8,6 +8,9 @@ import java.math.BigDecimal;
  * Regla 5: tarifa y costo no pueden ser negativos.
  */
 public class ConsultaGeneral extends Servicio implements Facturable {
+    /**
+     * Se usa java.math.BigDecimal debido a que es más fácil manipularlo que un double (Es un tema de precisión, big decimal permite representarlos exactamente)
+     */
     private BigDecimal tarifaBase;
 
     /**
@@ -50,6 +53,6 @@ public class ConsultaGeneral extends Servicio implements Facturable {
      */
     @Override
     public String toString() {
-        return null;
+        return "ConsultaGeneral{nombre='" + nombre + "', tarifaBase=" + tarifaBase + "}";
     }
 }

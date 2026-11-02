@@ -69,6 +69,7 @@ public class Vacunacion extends Servicio implements Facturable {
      */
     @Override
     public String toString() {
-        return null;
+        return "Vacunacion{nombre='" + nombre + "', costoVacuna=" + costoVacuna
+                + ", tarifaAplicacion=" + tarifaAplicacion + "}";
     }
 }

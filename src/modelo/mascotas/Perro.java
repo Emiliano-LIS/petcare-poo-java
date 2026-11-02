@@ -72,6 +72,7 @@ public class Perro extends Mascota {
      */
     @Override
     public String toString() {
-        return null;
+        return "Perro{mascota=" + super.toString() + ", raza='" + raza
+                + "', nivelEnergia='" + nivelEnergia + "'}";
     }
 }

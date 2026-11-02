@@ -56,14 +56,22 @@ public class Dueno extends Persona {
      * @param mascota mascota a agregar
      */
     public void agregarMascota(Mascota mascota) {
+        System.out.println("Se ha agregado la mascota " + mascota.getNombre() + " a la lista de mascota");
+        this.mascotas.add(mascota);
+
     }
 
     /**
      * Lista las mascotas del dueño.
-     * @return mascotas del dueño
+     * en consola.
      */
-    public List<Mascota> listarMascotas() {
-        return null;
+    public void listarMascotas() {
+        for (Mascota mascota : mascotas){
+            System.out.println("Nombre de la Mascota: " + mascota.getNombre());
+            System.out.println("Edad de la Mascota: " + mascota.getEdad());
+            System.out.println("Peso de la Mascota: " + mascota.getPeso());
+            System.out.println(" ");
+        }
     }
 
     /**
@@ -72,6 +80,7 @@ public class Dueno extends Persona {
      */
     @Override
     public String describirRol() {
+        System.out.println("El rol dueño es una persona responsable de una o más mascotas");
         return null;
     }
 
@@ -81,6 +90,7 @@ public class Dueno extends Persona {
      */
     @Override
     public String toString() {
-        return null;
+        return "Dueno{persona=" + super.toString() + ", direccion='" + direccion
+                + "', cantidadMascotas=" + mascotas.size() + "}";
     }
 }

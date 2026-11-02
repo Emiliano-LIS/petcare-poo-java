@@ -64,6 +64,7 @@ public class Veterinario extends Persona {
      */
     @Override
     public String describirRol() {
+        System.out.println("El rol veterinario es una persona responsable de atender los servicios");
         return null;
     }
 
@@ -73,6 +74,8 @@ public class Veterinario extends Persona {
      */
     @Override
     public String toString() {
-        return null;
+        return "Veterinario{persona=" + super.toString()
+                + ", cedulaProfesional='" + cedulaProfesional
+                + "', especialidad='" + especialidad + "'}";
     }
 }

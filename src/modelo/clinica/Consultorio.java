@@ -32,4 +32,13 @@ public class Consultorio {
     public void setNumero(int numero) {
         this.numero = numero;
     }
+
+    /**
+     * Resume los datos del consultorio.
+     * @return datos del consultorio en texto
+     */
+    @Override
+    public String toString() {
+        return "Consultorio{numero=" + numero + "}";
+    }
 }

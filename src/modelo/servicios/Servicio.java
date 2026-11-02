@@ -1,11 +1,13 @@
 package modelo.servicios;
 
+import java.math.BigDecimal;
+
 /**
  * Base de los servicios de la clínica.
  *
  * Regla 5: ningún costo puede ser negativo.
  */
-public abstract class Servicio {
+public abstract class Servicio implements Facturable {
     /** Nombre del servicio. */
     protected String nombre;
 
@@ -31,5 +33,19 @@ public abstract class Servicio {
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Override
+    public BigDecimal calcularCosto() {
+        return null;
+    }
+
+    /**
+     * Resume los datos del servicio.
+     * @return datos del servicio en texto
+     */
+    @Override
+    public String toString() {
+        return "Servicio{nombre='" + nombre + "'}";
     }
 }

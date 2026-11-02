@@ -88,6 +88,7 @@ public class Cirugia extends Servicio implements Facturable {
      */
     @Override
     public String toString() {
-        return null;
+        return "Cirugia{nombre='" + nombre + "', complejidad='" + complejidad
+                + "', horasQuirofano=" + horasQuirofano + ", tarifaPorHora=" + tarifaPorHora + "}";
     }
 }

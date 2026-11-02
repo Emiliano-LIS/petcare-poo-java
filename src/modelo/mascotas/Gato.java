@@ -6,7 +6,7 @@ import modelo.personas.Dueno;
  * Datos de un gato, incluido si es doméstico.
  */
 public class Gato extends Mascota {
-    private boolean domestico;
+    private boolean esDomestico;
 
     /**
      * Crea un gato con sus datos.
@@ -14,11 +14,11 @@ public class Gato extends Mascota {
      * @param edad edad del gato
      * @param peso peso del gato
      * @param dueno dueño del gato
-     * @param domestico si el gato es doméstico
+     * @param esDomestico si el gato es doméstico
      */
-    public Gato(String nombre, int edad, double peso, Dueno dueno, boolean domestico) {
+    public Gato(String nombre, int edad, double peso, Dueno dueno, boolean esDomestico) {
         super(nombre, edad, peso, dueno);
-        this.domestico = domestico;
+        this.esDomestico = esDomestico;
     }
 
     /**
@@ -26,15 +26,15 @@ public class Gato extends Mascota {
      * @return {@code true} si el gato es doméstico
      */
     public boolean isDomestico() {
-        return domestico;
+        return esDomestico;
     }
 
     /**
      * Define si el gato es doméstico.
-     * @param domestico si el gato es doméstico
+     * @param esDomestico si el gato es doméstico
      */
-    public void setDomestico(boolean domestico) {
-        this.domestico = domestico;
+    public void setDomestico(boolean esDomestico) {
+        this.esDomestico = esDomestico;
     }
 
     /**
@@ -52,6 +52,6 @@ public class Gato extends Mascota {
      */
     @Override
     public String toString() {
-        return null;
+        return "Gato{mascota=" + super.toString() + ", esDomestico=" + esDomestico + "}";
     }
 }

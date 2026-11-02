@@ -78,4 +78,14 @@ public class Comprobante {
     public String imprimir() {
         return null;
     }
+
+    /**
+     * Resume el comprobante y el folio de su cita.
+     * @return datos del comprobante en texto
+     */
+    @Override
+    public String toString() {
+        return "Comprobante{folio='" + folio + "', total=" + total
+                + ", cita=" + (cita == null ? null : cita.getFolio()) + "}";
+    }
 }

@@ -26,8 +26,11 @@ public abstract class Mascota {
      */
     public Mascota(String nombre, int edad, double peso, Dueno dueno) {
         this.nombre = nombre;
-        this.edad = edad;
-        this.peso = peso;
+        /**
+         * En vez de usar this.edad = edad se uso el metodo ya construido y con validación de <= 0 para validar que no se coloque nada fuera de las reglas establecidas.
+         */
+        setEdad(edad);
+        setPeso(peso);
         this.dueno = dueno;
         // El historial es propio de esta mascota; no se comparte.
         this.historial = new HistorialClinico();
@@ -62,6 +65,12 @@ public abstract class Mascota {
      * @param edad edad mayor que cero
      */
     public void setEdad(int edad) {
+        if (edad <= 0) {
+            /**
+            * Aquí se uso el throw para tirar un error a consola de que no se puede asignar una edad negativa o en cero.
+            * */
+            throw new IllegalArgumentException( "La edad debe ser mayor a cero.");
+        }
         this.edad = edad;
     }
 
@@ -78,6 +87,12 @@ public abstract class Mascota {
      * @param peso peso mayor que cero
      */
     public void setPeso(double peso) {
+        if (peso <= 0) {
+            /**
+             * Aquí se uso el throw para tirar un error a consola de que no se puede asignar un peso negativo o en cero.
+             * */
+            throw new IllegalArgumentException( "El peso debe ser mayor a cero.");
+        }
         this.peso = peso;
     }
 
@@ -117,6 +132,7 @@ public abstract class Mascota {
      */
     @Override
     public String toString() {
-        return null;
+        return "Mascota{nombre='" + nombre + "', edad=" + edad + ", peso=" + peso
+                + ", dueno=" + (dueno == null ? null : dueno.getNombre()) + "}";
     }
 }
