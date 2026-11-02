@@ -15,6 +15,7 @@ public abstract class Mascota {
     private int edad;
     private double peso;
     private Dueno dueno;
+    private String sonido;
     private HistorialClinico historial;
 
     /**

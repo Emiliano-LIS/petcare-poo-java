@@ -60,7 +60,7 @@ public class Vacunacion extends Servicio implements Facturable {
      */
     @Override
     public BigDecimal calcularCosto() {
-        return null;
+        return costoVacuna.add(tarifaAplicacion);
     }
 
     /**

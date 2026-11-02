@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * Regla 5: tarifa y costo no pueden ser negativos.
  */
 public class Cirugia extends Servicio implements Facturable {
-    private String complejidad;
+    private double complejidad;
     private double horasQuirofano;
     private BigDecimal tarifaPorHora;
 
@@ -18,7 +18,7 @@ public class Cirugia extends Servicio implements Facturable {
      * @param horasQuirofano horas de quirófano
      * @param tarifaPorHora tarifa no negativa por hora
      */
-    public Cirugia(String complejidad, double horasQuirofano, BigDecimal tarifaPorHora) {
+    public Cirugia(double complejidad, double horasQuirofano, BigDecimal tarifaPorHora) {
         super("Cirugía");
         this.complejidad = complejidad;
         this.horasQuirofano = horasQuirofano;
@@ -29,7 +29,7 @@ public class Cirugia extends Servicio implements Facturable {
      * Devuelve la complejidad.
      * @return nivel de dificultad
      */
-    public String getComplejidad() {
+    public double getComplejidad() {
         return complejidad;
     }
 
@@ -37,7 +37,7 @@ public class Cirugia extends Servicio implements Facturable {
      * Cambia la complejidad.
      * @param complejidad nivel de dificultad
      */
-    public void setComplejidad(String complejidad) {
+    public void setComplejidad(double complejidad) {
         this.complejidad = complejidad;
     }
 
@@ -79,7 +79,14 @@ public class Cirugia extends Servicio implements Facturable {
      */
     @Override
     public BigDecimal calcularCosto() {
-        return null;
+        /**
+         * Aquí se decide hacer así por los tipos de datos, es mejor hacer esto a convertir el BigDecimal a double o int. (Se perdería la precisión)
+         */
+        BigDecimal resultado = tarifaPorHora
+                .multiply(BigDecimal.valueOf(horasQuirofano))
+                .multiply(BigDecimal.valueOf(complejidad));
+
+        return resultado;
     }
 
     /**
