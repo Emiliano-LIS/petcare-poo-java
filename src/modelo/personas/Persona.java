@@ -33,6 +33,14 @@ public abstract class Persona {
      * @param correo nuevo correo
      */
     public void actualizarContacto(String telefono, String correo) {
+        if (correo != null ) {
+            this.correo = correo;
+            System.out.println("Correo cambiado exitosamente");
+        }
+        if (telefono != null) {
+            this.telefono = telefono;
+            System.out.println("Telefono cambiado exitosamente");
+        }
     }
 
     /**
@@ -104,4 +112,14 @@ public abstract class Persona {
      * @return rol de la persona
      */
     public abstract String describirRol();
+
+    /**
+     * Resume los datos de contacto de la persona.
+     * @return datos de la persona en texto
+     */
+    @Override
+    public String toString() {
+        return "Persona{nombre='" + nombre + "', apellido='" + apellido
+                + "', telefono='" + telefono + "', correo='" + correo + "'}";
+    }
 }

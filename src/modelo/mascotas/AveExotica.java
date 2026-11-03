@@ -52,6 +52,6 @@ public class AveExotica extends Mascota {
      */
     @Override
     public String toString() {
-        return null;
+        return "AveExotica{mascota=" + super.toString() + ", longitudAlas=" + longitudAlas + "}";
     }
 }

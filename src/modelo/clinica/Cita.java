@@ -44,7 +44,7 @@ public class Cita {
      * @param veterinario veterinario a cargo
      * @param fechaHora fecha y hora
      * @param servicio servicio solicitado
-     * @param consultorio consultorio asignado o {@code null} si no tiene
+     * @param consultorio consultorio asignado o null si no tiene
      */
     public Cita(Mascota mascota, Veterinario veterinario, LocalDateTime fechaHora,
             Servicio servicio, Consultorio consultorio) {
@@ -58,7 +58,7 @@ public class Cita {
 
     /**
      * Devuelve el folio.
-     * @return folio o {@code null} si no tiene
+     * @return folio o null si no tiene
      */
     public String getFolio() {
         return folio;
@@ -130,7 +130,7 @@ public class Cita {
 
     /**
      * Devuelve el consultorio.
-     * @return consultorio asignado o {@code null} si no tiene
+     * @return consultorio asignado o null si no tiene
      */
     public Consultorio getConsultorio() {
         return consultorio;
@@ -162,7 +162,7 @@ public class Cita {
 
     /**
      * Devuelve las observaciones.
-     * @return observaciones o {@code null} si no hay
+     * @return observaciones o null si no hay
      */
     public String getObservaciones() {
         return observaciones;
@@ -178,7 +178,7 @@ public class Cita {
 
     /**
      * Devuelve el comprobante.
-     * @return comprobante o {@code null} si no existe
+     * @return comprobante o null si no existe
      */
     public Comprobante getComprobante() {
         return comprobante;
@@ -216,5 +216,20 @@ public class Cita {
      */
     public Comprobante generarComprobante() {
         return null;
+    }
+
+    /**
+     * Resume la cita mediante los datos principales de sus participantes.
+     * @return datos de la cita en texto
+     */
+    @Override
+    public String toString() {
+        return "Cita{folio='" + folio + "', fechaHora=" + fechaHora + ", estado=" + estado
+                + ", mascota=" + (mascota == null ? null : mascota.getNombre())
+                + ", veterinario=" + (veterinario == null ? null : veterinario.getNombre())
+                + ", consultorio=" + (consultorio == null ? null : consultorio.getNumero())
+                + ", servicio=" + (servicio == null ? null : servicio.getNombre())
+                + ", observaciones='" + observaciones + "', comprobante="
+                + (comprobante == null ? null : comprobante.getFolio()) + "}";
     }
 }

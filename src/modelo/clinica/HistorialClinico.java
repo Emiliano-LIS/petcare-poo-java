@@ -46,4 +46,14 @@ public class HistorialClinico {
     public List<Cita> listarAtenciones() {
         return null;
     }
+
+    /**
+     * Resume la cantidad de atenciones del historial.
+     * @return resumen del historial en texto
+     */
+    @Override
+    public String toString() {
+        return "HistorialClinico{cantidadAtenciones="
+                + (atenciones == null ? null : atenciones.size()) + "}";
+    }
 }

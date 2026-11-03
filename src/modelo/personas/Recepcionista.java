@@ -54,6 +54,16 @@ public class Recepcionista extends Persona {
      */
     @Override
     public String describirRol() {
+        System.out.println("El rol recepcionista es una persona responsable gestionar el registro y agenda de citas.");
         return null;
+    }
+
+    /**
+     * Resume los datos del recepcionista.
+     * @return datos del recepcionista en texto
+     */
+    @Override
+    public String toString() {
+        return "Recepcionista{persona=" + super.toString() + ", turno='" + turno + "'}";
     }
 }

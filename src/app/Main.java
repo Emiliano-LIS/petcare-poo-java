@@ -37,6 +37,15 @@ public class Main {
     }
 
     /**
+     * Resume la clínica asociada al menú.
+     * @return datos de la aplicación en texto
+     */
+    @Override
+    public String toString() {
+        return "Main{clinica=" + (clinica == null ? null : clinica.getNombre()) + "}";
+    }
+
+    /**
      * Repite el menú hasta salir.
      */
     public void iniciar() {
@@ -54,7 +63,7 @@ public class Main {
     }
 
     /**
-     * Inicia PetCare.
+     * Método main de inicio.
      * @param argumentos argumentos de consola
      */
     public static void main(String[] argumentos) {
@@ -82,7 +91,7 @@ public class Main {
     }
 
     /**
-     * Lee la opción sin fallar si se escribe texto.
+     * Lee la opción sin fallar si se escribe texto (try-catch).
      * @return opción leída, 0 si no es un entero o 10 si termina la entrada
      */
     private int leerOpcion() {

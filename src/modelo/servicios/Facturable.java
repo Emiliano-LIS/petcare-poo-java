@@ -1,5 +1,9 @@
 package modelo.servicios;
 
+
+/**
+ * Se usa java.math.BigDecimal debido a que es más fácil manipularlo que un double (Es un tema de precisión, big decimal permite representarlos exactamente)
+ */
 import java.math.BigDecimal;
 
 /**

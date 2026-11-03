@@ -143,4 +143,15 @@ public class Clinica {
     public List<Comprobante> consultarCobrosPorMascota(Mascota mascota) {
         return null;
     }
+
+    /**
+     * Resume los datos y la cantidad de registros de la clínica.
+     * @return datos de la clínica en texto
+     */
+    @Override
+    public String toString() {
+        return "Clinica{nombre='" + nombre + "', cantidadConsultorios=" + consultorios.size()
+                + ", cantidadVeterinarios=" + veterinarios.size()
+                + ", cantidadCitas=" + citas.size() + "}";
+    }
 }
