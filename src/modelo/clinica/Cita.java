@@ -16,13 +16,15 @@ import modelo.servicios.Servicio;
  * Regla 6: los cobros deben consultarse por mascota y veterinario.
  */
 public class Cita {
-    private String folio;
-    private LocalDateTime fechaHora;
+    // static comparte la numeración entre todas las citas mientras el programa está en ejecución.
+    private static int contadorCitas = 0;
+    private final String folio;
+    private final LocalDateTime fechaHora;
     private EstadoCita estado;
-    private Mascota mascota;
-    private Veterinario veterinario;
-    private Consultorio consultorio;
-    private Servicio servicio;
+    private final Mascota mascota;
+    private final Veterinario veterinario;
+    private final Consultorio consultorio;
+    private final Servicio servicio;
     private String observaciones;
     private Comprobante comprobante;
 
@@ -33,11 +35,6 @@ public class Cita {
      * @param fechaHora fecha y hora
      * @param servicio servicio solicitado
      */
-    public Cita(Mascota mascota, Veterinario veterinario, LocalDateTime fechaHora,
-            Servicio servicio) {
-        this(mascota, veterinario, fechaHora, servicio, null);
-    }
-
     /**
      * Crea una cita programada con el consultorio indicado.
      * @param mascota mascota a atender
@@ -46,30 +43,26 @@ public class Cita {
      * @param servicio servicio solicitado
      * @param consultorio consultorio asignado o null si no tiene
      */
-    public Cita(Mascota mascota, Veterinario veterinario, LocalDateTime fechaHora,
-            Servicio servicio, Consultorio consultorio) {
+    public Cita(Mascota mascota, Veterinario veterinario, LocalDateTime fechaHora, Servicio servicio, Consultorio consultorio) {
+        // Lo hacemos en el constructor para evitar inconsistencias futuras.
+        if (mascota == null || veterinario == null || fechaHora == null || servicio == null || consultorio == null) {
+            throw new IllegalArgumentException("La cita debe tener todos sus datos de atención.");
+        }
         this.mascota = mascota;
         this.veterinario = veterinario;
         this.fechaHora = fechaHora;
         this.servicio = servicio;
         this.consultorio = consultorio;
         this.estado = EstadoCita.PROGRAMADA;
+        this.folio = "CITA-" + (++contadorCitas);
     }
 
     /**
      * Devuelve el folio.
-     * @return folio o null si no tiene
+     * @return folio asignado automáticamente al crear la cita
      */
     public String getFolio() {
         return folio;
-    }
-
-    /**
-     * Cambia el folio.
-     * @param folio nuevo folio
-     */
-    public void setFolio(String folio) {
-        this.folio = folio;
     }
 
     /**
@@ -80,13 +73,6 @@ public class Cita {
         return fechaHora;
     }
 
-    /**
-     * Cambia la fecha y hora.
-     * @param fechaHora nueva fecha y hora
-     */
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
-    }
 
     /**
      * Devuelve el estado.
@@ -105,27 +91,11 @@ public class Cita {
     }
 
     /**
-     * Cambia la mascota.
-     * @param mascota mascota a atender
-     */
-    public void setMascota(Mascota mascota) {
-        this.mascota = mascota;
-    }
-
-    /**
      * Devuelve el veterinario.
      * @return veterinario a cargo
      */
     public Veterinario getVeterinario() {
         return veterinario;
-    }
-
-    /**
-     * Cambia el veterinario.
-     * @param veterinario veterinario a cargo
-     */
-    public void setVeterinario(Veterinario veterinario) {
-        this.veterinario = veterinario;
     }
 
     /**
@@ -137,27 +107,11 @@ public class Cita {
     }
 
     /**
-     * Cambia el consultorio.
-     * @param consultorio nuevo consultorio
-     */
-    public void setConsultorio(Consultorio consultorio) {
-        this.consultorio = consultorio;
-    }
-
-    /**
      * Devuelve el servicio.
      * @return servicio de la cita
      */
     public Servicio getServicio() {
         return servicio;
-    }
-
-    /**
-     * Cambia el servicio.
-     * @param servicio servicio solicitado
-     */
-    public void setServicio(Servicio servicio) {
-        this.servicio = servicio;
     }
 
     /**
@@ -169,14 +123,6 @@ public class Cita {
     }
 
     /**
-     * Cambia las observaciones.
-     * @param observaciones detalles de la atención
-     */
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    /**
      * Devuelve el comprobante.
      * @return comprobante o null si no existe
      */
@@ -185,22 +131,33 @@ public class Cita {
     }
 
     /**
-     * Asigna un consultorio disponible.
-     * @param consultorio consultorio elegido
-     */
-    public void asignarConsultorio(Consultorio consultorio) {
-    }
-
-    /**
      * Marca la cita como atendida si no está cancelada.
      */
     public void atender() {
+        if (estado != EstadoCita.PROGRAMADA) {
+            System.out.println("Solo se puede atender una cita programada");
+            return;
+        }
+
+        if (mascota.getHistorial() == null) {
+            System.out.println("La mascota está dada de baja y no tiene historial activo.");
+            return;
+        }
+
+        estado = EstadoCita.ATENDIDA;
+        mascota.getHistorial().registrarAtencion(this);
     }
 
     /**
      * Cancela la cita.
      */
     public void cancelar() {
+        if (estado != EstadoCita.PROGRAMADA) {
+            System.out.println("Solo se puede cancelar una cita programada");
+            return;
+        }
+
+        estado = EstadoCita.CANCELADA;
     }
 
     /**
@@ -208,6 +165,19 @@ public class Cita {
      * @param observaciones detalles de la atención
      */
     public void registrarObservaciones(String observaciones) {
+        if (estado != EstadoCita.ATENDIDA) {
+            System.out.println("Solo se puede registrar observaciones de una cita ya atendida");
+            return;
+        }
+
+        if (observaciones == null || observaciones.isBlank()) {
+            System.out.println("Las observaciones no deben de estar vacias");
+            return;
+        }
+
+        // Se concatenan.
+        this.observaciones = this.observaciones == null ? observaciones.trim()
+                : this.observaciones + System.lineSeparator() + observaciones.trim();
     }
 
     /**
@@ -215,7 +185,17 @@ public class Cita {
      * @return comprobante de cobro
      */
     public Comprobante generarComprobante() {
-        return null;
+        if (estado != EstadoCita.ATENDIDA) {
+            System.out.println("Solo se puede generar el comprobante de una cita atendida.");
+            return null;
+        }
+
+        if (comprobante == null) {
+            // Como comprobante se construye a partir de una Cita cita en su constructor, le pasamos ESTA cita.
+            comprobante = new Comprobante(this);
+        }
+
+        return comprobante;
     }
 
     /**
@@ -224,12 +204,18 @@ public class Cita {
      */
     @Override
     public String toString() {
-        return "Cita{folio='" + folio + "', fechaHora=" + fechaHora + ", estado=" + estado
-                + ", mascota=" + (mascota == null ? null : mascota.getNombre())
-                + ", veterinario=" + (veterinario == null ? null : veterinario.getNombre())
-                + ", consultorio=" + (consultorio == null ? null : consultorio.getNumero())
-                + ", servicio=" + (servicio == null ? null : servicio.getNombre())
-                + ", observaciones='" + observaciones + "', comprobante="
-                + (comprobante == null ? null : comprobante.getFolio()) + "}";
+        String estadoVisible = switch (estado) {
+            case PROGRAMADA -> "Programada";
+            case ATENDIDA -> "Atendida";
+            case CANCELADA -> "Cancelada";
+        };
+        String notas = observaciones == null || observaciones.isBlank()
+                ? "Sin observaciones" : observaciones.replaceAll("\\R+", " ");
+        return folio + " | Fecha: " + fechaHora.toString().replace('T', ' ')
+                + " | Estado: " + estadoVisible + " | Mascota: " + mascota.getNombre()
+                + " | Veterinario: " + veterinario.getNombre() + " " + veterinario.getApellido()
+                + " | Consultorio: " + consultorio.getNumero()
+                + " | Servicio: " + servicio.getNombre() + " | Observaciones: " + notas
+                + " | Comprobante: " + (comprobante == null ? "Sin emitir" : comprobante.getFolio());
     }
 }

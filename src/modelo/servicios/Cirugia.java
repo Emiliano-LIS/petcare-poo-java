@@ -77,7 +77,8 @@ public class Cirugia extends Servicio implements Facturable {
 
     private static double validarPositivo(double valor, String campo) {
         if (!Double.isFinite(valor) || valor <= 0) {
-            throw new IllegalArgumentException(campo + " debe ser un número finito mayor que cero.");
+            throw new IllegalArgumentException(
+                    campo + " debe ser un número finito mayor que cero.");
         }
         return valor;
     }
@@ -102,7 +103,8 @@ public class Cirugia extends Servicio implements Facturable {
      */
     @Override
     public String toString() {
-        return "Cirugia{nombre='" + nombre + "', complejidad='" + complejidad
-                + "', horasQuirofano=" + horasQuirofano + ", tarifaPorHora=" + tarifaPorHora + "}";
+        return super.toString() + " | Factor de complejidad: " + complejidad
+                + " | Horas de quirófano: " + horasQuirofano
+                + " | Tarifa por hora: $" + tarifaPorHora.toPlainString();
     }
 }

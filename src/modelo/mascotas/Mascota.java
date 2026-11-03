@@ -14,7 +14,7 @@ public abstract class Mascota {
     protected String nombre;
     private int edad;
     private double peso;
-    private Dueno dueno;
+    private final Dueno dueno;
     private HistorialClinico historial;
 
     /**
@@ -25,7 +25,11 @@ public abstract class Mascota {
      * @param dueno dueño de la mascota
      */
     public Mascota(String nombre, int edad, double peso, Dueno dueno) {
-        this.nombre = nombre;
+        // Usamos throw porqué se pide los errores en este formato.
+        if (dueno == null) {
+            throw new IllegalArgumentException("El dueño es obligatorio.");
+        }
+        this.nombre = validarTexto(nombre, "El nombre");
         // Se reutiliza la validación sin llamar métodos sobreescribibles durante la construcción.
         this.edad = validarEdad(edad);
         this.peso = validarPeso(peso);
@@ -47,7 +51,16 @@ public abstract class Mascota {
      * @param nombre nuevo nombre
      */
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = validarTexto(nombre, "El nombre");
+    }
+
+    // Es estatico porqué solo es utilitario, no depende de la instanciación :)
+    protected static String validarTexto(String texto, String campo) {
+        if (texto == null || texto.isBlank()) {
+            throw new IllegalArgumentException(campo + " es obligatorio.");
+        }
+        // Concatena
+        return texto.trim();
     }
 
     /**
@@ -108,16 +121,30 @@ public abstract class Mascota {
      * Cambia el dueño.
      * @param dueno nuevo dueño
      */
-    public void setDueno(Dueno dueno) {
-        this.dueno = dueno;
-    }
-
     /**
      * Devuelve el historial.
-     * @return historial de la mascota
+     * @return historial de la mascota o null después de su baja
      */
     public HistorialClinico getHistorial() {
         return historial;
+    }
+
+    /**
+     * Crea un historial vacío al volver a registrar una mascota dada de baja.
+     * Conserva el historial existente si la mascota ya tiene uno.
+     */
+    public void crearHistorial() {
+        if (historial == null) {
+            historial = new HistorialClinico();
+        }
+    }
+
+    /**
+     * Retira el historial de la mascota durante su baja de la clínica.
+     */
+    public void eliminarHistorial() {
+        historial = null;
+        // EL historial NO se elimina de memoria, puede ser recuperado.
     }
 
     /**
@@ -132,7 +159,7 @@ public abstract class Mascota {
      */
     @Override
     public String toString() {
-        return "Mascota{nombre='" + nombre + "', edad=" + edad + ", peso=" + peso
-                + ", dueno=" + (dueno == null ? null : dueno.getNombre()) + "}";
+        return "Nombre: " + nombre + " | Edad: " + edad + " | Peso: " + peso
+                + " | Dueño: " + dueno.getNombre() + " " + dueno.getApellido();
     }
 }

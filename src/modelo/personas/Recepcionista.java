@@ -23,7 +23,7 @@ public class Recepcionista extends Persona {
     public Recepcionista(String nombre, String apellido, String telefono, String correo,
             String turno) {
         super(nombre, apellido, telefono, correo);
-        this.turno = turno;
+        this.turno = validarTexto(turno, "El turno");
     }
 
     /**
@@ -39,7 +39,7 @@ public class Recepcionista extends Persona {
      * @param turno nuevo turno
      */
     public void setTurno(String turno) {
-        this.turno = turno;
+        this.turno = validarTexto(turno, "El turno");
     }
 
     /**
@@ -49,12 +49,8 @@ public class Recepcionista extends Persona {
      */
     public void registrarCita(Cita cita, Clinica clinica) {
         if (cita == null || clinica == null) {
-            throw new IllegalArgumentException("La cita y la clínica son obligatorias.");
-        }
-        if (cita.getVeterinario() == null || cita.getFechaHora() == null
-                || cita.getMascota() == null || cita.getServicio() == null
-                || cita.getConsultorio() == null) {
-            throw new IllegalArgumentException("La cita debe tener todos sus datos de atención.");
+            System.out.println("La cita y la clínica son obligatorias.");
+            return;
         }
         clinica.agendarCita(cita);
     }
@@ -74,6 +70,6 @@ public class Recepcionista extends Persona {
      */
     @Override
     public String toString() {
-        return "Recepcionista{persona=" + super.toString() + ", turno='" + turno + "'}";
+        return "Recepcionista | " + super.toString() + " | Turno: " + turno;
     }
 }

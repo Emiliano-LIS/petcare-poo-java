@@ -53,6 +53,6 @@ public class ConsultaGeneral extends Servicio implements Facturable {
      */
     @Override
     public String toString() {
-        return "ConsultaGeneral{nombre='" + nombre + "', tarifaBase=" + tarifaBase + "}";
+        return super.toString() + " | Tarifa base: $" + tarifaBase.toPlainString();
     }
 }

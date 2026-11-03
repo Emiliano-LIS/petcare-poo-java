@@ -10,7 +10,7 @@ import modelo.mascotas.Mascota;
  */
 public class Dueno extends Persona {
     private String direccion;
-    private List<Mascota> mascotas;
+    private final List<Mascota> mascotas;
 
     /**
      * Crea un dueño sin mascotas registradas.
@@ -23,7 +23,7 @@ public class Dueno extends Persona {
     public Dueno(String nombre, String apellido, String telefono, String correo,
             String direccion) {
         super(nombre, apellido, telefono, correo);
-        this.direccion = direccion;
+        this.direccion = validarTexto(direccion, "La dirección");
         this.mascotas = new ArrayList<>();
     }
 
@@ -40,15 +40,15 @@ public class Dueno extends Persona {
      * @param direccion nueva dirección
      */
     public void setDireccion(String direccion) {
-        this.direccion = direccion;
+        this.direccion = validarTexto(direccion, "La dirección");
     }
 
     /**
      * Devuelve las mascotas.
-     * @return mascotas del dueño
+     * @return copia no modificable de las mascotas del dueño
      */
     public List<Mascota> getMascotas() {
-        return mascotas;
+        return List.copyOf(mascotas);
     }
 
     /**
@@ -56,9 +56,29 @@ public class Dueno extends Persona {
      * @param mascota mascota a agregar
      */
     public void agregarMascota(Mascota mascota) {
-        System.out.println("Se ha agregado la mascota " + mascota.getNombre() + " a la lista de mascota");
+        if (mascota == null || mascota.getDueno() != this) {
+            System.out.println("La mascota debe pertenecer a este dueño.");
+            return;
+        }
+        if (mascotas.contains(mascota)) {
+            return;
+        }
+        System.out.println("Se ha agregado la mascota " + mascota.getNombre()
+                + " a la lista de mascota");
         this.mascotas.add(mascota);
 
+    }
+
+    /**
+     * Retira una mascota de la lista del dueño durante su baja.
+     * @param mascota mascota a retirar
+     */
+    public void eliminarMascota(Mascota mascota) {
+        if (mascota == null) {
+            System.out.println("La mascota es obligatoria.");
+            return;
+        }
+        mascotas.removeIf(registrada -> registrada == mascota);
     }
 
     /**
@@ -66,7 +86,7 @@ public class Dueno extends Persona {
      * en consola.
      */
     public void listarMascotas() {
-        for (Mascota mascota : mascotas){
+        for (Mascota mascota : mascotas) {
             System.out.println("Nombre de la Mascota: " + mascota.getNombre());
             System.out.println("Edad de la Mascota: " + mascota.getEdad());
             System.out.println("Peso de la Mascota: " + mascota.getPeso());
@@ -89,7 +109,7 @@ public class Dueno extends Persona {
      */
     @Override
     public String toString() {
-        return "Dueno{persona=" + super.toString() + ", direccion='" + direccion
-                + "', cantidadMascotas=" + mascotas.size() + "}";
+        return "Dueño | " + super.toString() + " | Dirección: " + direccion
+                + " | Mascotas: " + mascotas.size();
     }
 }

@@ -17,7 +17,7 @@ public abstract class Servicio implements Facturable {
      * @param nombre nombre del servicio
      */
     public Servicio(String nombre) {
-        this.nombre = nombre;
+        this.nombre = validarNombre(nombre);
     }
 
     /**
@@ -33,7 +33,15 @@ public abstract class Servicio implements Facturable {
      * @param nombre nuevo nombre
      */
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = validarNombre(nombre);
+    }
+
+    private static String validarNombre(String nombre) {
+        // Validamos que existe y que no sea ""
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre del servicio es obligatorio.");
+        }
+        return nombre.trim();
     }
 
     // Acceso de paquete: estas validaciones se comparten solo entre los servicios.
@@ -44,6 +52,7 @@ public abstract class Servicio implements Facturable {
         return importe;
     }
 
+    // Para evitar decimales demasiados largos con BigDecimal
     static BigDecimal redondearCosto(BigDecimal costo) {
         return costo.setScale(2, RoundingMode.HALF_UP);
     }
@@ -54,6 +63,6 @@ public abstract class Servicio implements Facturable {
      */
     @Override
     public String toString() {
-        return "Servicio{nombre='" + nombre + "'}";
+        return "Servicio: " + nombre;
     }
 }

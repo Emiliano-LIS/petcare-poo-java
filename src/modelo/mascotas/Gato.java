@@ -52,6 +52,6 @@ public class Gato extends Mascota {
      */
     @Override
     public String toString() {
-        return "Gato{mascota=" + super.toString() + ", esDomestico=" + esDomestico + "}";
+        return "Gato | " + super.toString() + " | Doméstico: " + (esDomestico ? "Sí" : "No");
     }
 }
