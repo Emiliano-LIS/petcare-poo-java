@@ -35,11 +35,6 @@ public abstract class Servicio implements Facturable {
         this.nombre = nombre;
     }
 
-    @Override
-    public BigDecimal calcularCosto() {
-        return null;
-    }
-
     /**
      * Resume los datos del servicio.
      * @return datos del servicio en texto

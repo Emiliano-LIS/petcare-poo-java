@@ -35,6 +35,12 @@ public class ConsultaGeneral extends Servicio implements Facturable {
      * @param tarifaBase tarifa no negativa
      */
     public void setTarifaBase(BigDecimal tarifaBase) {
+        if (tarifaBase.compareTo(BigDecimal.ZERO) <= 0) {
+            /**
+             * Aquí se uso el throw para tirar un error a consola de que no se puede asignar una tarifa base negativa o en cero.
+             * */
+            throw new IllegalArgumentException( "La tarifa base debe ser mayor a cero.");
+        }
         this.tarifaBase = tarifaBase;
     }
 
@@ -44,7 +50,7 @@ public class ConsultaGeneral extends Servicio implements Facturable {
      */
     @Override
     public BigDecimal calcularCosto() {
-        return null;
+        return tarifaBase;
     }
 
     /**
