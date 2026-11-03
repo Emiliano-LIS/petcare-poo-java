@@ -18,7 +18,7 @@ public class AveExotica extends Mascota {
      */
     public AveExotica(String nombre, int edad, double peso, Dueno dueno, double longitudAlas) {
         super(nombre, edad, peso, dueno);
-        this.longitudAlas = longitudAlas;
+        this.longitudAlas = validarLongitud(longitudAlas);
     }
 
     /**
@@ -34,7 +34,15 @@ public class AveExotica extends Mascota {
      * @param longitudAlas nueva longitud
      */
     public void setLongitudAlas(double longitudAlas) {
-        this.longitudAlas = longitudAlas;
+        this.longitudAlas = validarLongitud(longitudAlas);
+    }
+
+    private static double validarLongitud(double longitudAlas) {
+        // El isFinite es para casos extremos donde se usen numeros periodicos aprovechando el double.
+        if (!Double.isFinite(longitudAlas) || longitudAlas <= 0) {
+            throw new IllegalArgumentException("La longitud de alas debe ser finita y positiva.");
+        }
+        return longitudAlas;
     }
 
     /**
@@ -43,7 +51,7 @@ public class AveExotica extends Mascota {
      */
     @Override
     public String hacerSonido() {
-        return null;
+        return "Pío";
     }
 
     /**
@@ -52,6 +60,6 @@ public class AveExotica extends Mascota {
      */
     @Override
     public String toString() {
-        return "AveExotica{mascota=" + super.toString() + ", longitudAlas=" + longitudAlas + "}";
+        return "Ave exótica | " + super.toString() + " | Longitud de alas: " + longitudAlas;
     }
 }

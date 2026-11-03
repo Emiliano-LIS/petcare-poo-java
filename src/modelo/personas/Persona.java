@@ -21,10 +21,17 @@ public abstract class Persona {
      * @param correo correo electrónico
      */
     public Persona(String nombre, String apellido, String telefono, String correo) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.telefono = telefono;
-        this.correo = correo;
+        this.nombre = validarTexto(nombre, "El nombre");
+        this.apellido = validarTexto(apellido, "El apellido");
+        this.telefono = validarTexto(telefono, "El teléfono");
+        this.correo = validarTexto(correo, "El correo");
+    }
+
+    protected static String validarTexto(String texto, String campo) {
+        if (texto == null || texto.isBlank()) {
+            throw new IllegalArgumentException(campo + " es obligatorio.");
+        }
+        return texto.trim();
     }
 
     /**
@@ -33,12 +40,18 @@ public abstract class Persona {
      * @param correo nuevo correo
      */
     public void actualizarContacto(String telefono, String correo) {
-        if (correo != null ) {
-            this.correo = correo;
+        if ((telefono == null && correo == null)
+                || (telefono != null && telefono.isBlank())
+                || (correo != null && correo.isBlank())) {
+            System.out.println("Indica al menos un dato de contacto y evita textos vacíos.");
+            return;
+        }
+        if (correo != null) {
+            this.correo = correo.trim();
             System.out.println("Correo cambiado exitosamente");
         }
         if (telefono != null) {
-            this.telefono = telefono;
+            this.telefono = telefono.trim();
             System.out.println("Telefono cambiado exitosamente");
         }
     }
@@ -56,7 +69,7 @@ public abstract class Persona {
      * @param nombre nuevo nombre
      */
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = validarTexto(nombre, "El nombre");
     }
 
     /**
@@ -72,7 +85,7 @@ public abstract class Persona {
      * @param apellido nuevo apellido
      */
     public void setApellido(String apellido) {
-        this.apellido = apellido;
+        this.apellido = validarTexto(apellido, "El apellido");
     }
 
     /**
@@ -88,7 +101,7 @@ public abstract class Persona {
      * @param telefono nuevo teléfono
      */
     public void setTelefono(String telefono) {
-        this.telefono = telefono;
+        this.telefono = validarTexto(telefono, "El teléfono");
     }
 
     /**
@@ -104,7 +117,7 @@ public abstract class Persona {
      * @param correo nuevo correo
      */
     public void setCorreo(String correo) {
-        this.correo = correo;
+        this.correo = validarTexto(correo, "El correo");
     }
 
     /**
@@ -119,7 +132,7 @@ public abstract class Persona {
      */
     @Override
     public String toString() {
-        return "Persona{nombre='" + nombre + "', apellido='" + apellido
-                + "', telefono='" + telefono + "', correo='" + correo + "'}";
+        return "Nombre: " + nombre + " " + apellido
+                + " | Teléfono: " + telefono + " | Correo: " + correo;
     }
 }

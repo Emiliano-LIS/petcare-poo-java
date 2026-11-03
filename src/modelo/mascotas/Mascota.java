@@ -14,8 +14,7 @@ public abstract class Mascota {
     protected String nombre;
     private int edad;
     private double peso;
-    private Dueno dueno;
-    private String sonido;
+    private final Dueno dueno;
     private HistorialClinico historial;
 
     /**
@@ -26,12 +25,14 @@ public abstract class Mascota {
      * @param dueno dueño de la mascota
      */
     public Mascota(String nombre, int edad, double peso, Dueno dueno) {
-        this.nombre = nombre;
-        /**
-         * En vez de usar this.edad = edad se uso el metodo ya construido y con validación de <= 0 para validar que no se coloque nada fuera de las reglas establecidas.
-         */
-        setEdad(edad);
-        setPeso(peso);
+        // Usamos throw porqué se pide los errores en este formato.
+        if (dueno == null) {
+            throw new IllegalArgumentException("El dueño es obligatorio.");
+        }
+        this.nombre = validarTexto(nombre, "El nombre");
+        // Se reutiliza la validación sin llamar métodos sobreescribibles durante la construcción.
+        this.edad = validarEdad(edad);
+        this.peso = validarPeso(peso);
         this.dueno = dueno;
         // El historial es propio de esta mascota; no se comparte.
         this.historial = new HistorialClinico();
@@ -50,7 +51,16 @@ public abstract class Mascota {
      * @param nombre nuevo nombre
      */
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = validarTexto(nombre, "El nombre");
+    }
+
+    // Es estatico porqué solo es utilitario, no depende de la instanciación :)
+    protected static String validarTexto(String texto, String campo) {
+        if (texto == null || texto.isBlank()) {
+            throw new IllegalArgumentException(campo + " es obligatorio.");
+        }
+        // Concatena
+        return texto.trim();
     }
 
     /**
@@ -66,13 +76,7 @@ public abstract class Mascota {
      * @param edad edad mayor que cero
      */
     public void setEdad(int edad) {
-        if (edad <= 0) {
-            /**
-            * Aquí se uso el throw para tirar un error a consola de que no se puede asignar una edad negativa o en cero.
-            * */
-            throw new IllegalArgumentException( "La edad debe ser mayor a cero.");
-        }
-        this.edad = edad;
+        this.edad = validarEdad(edad);
     }
 
     /**
@@ -85,16 +89,24 @@ public abstract class Mascota {
 
     /**
      * Cambia el peso.
-     * @param peso peso mayor que cero
+     * @param peso peso finito mayor que cero
      */
     public void setPeso(double peso) {
-        if (peso <= 0) {
-            /**
-             * Aquí se uso el throw para tirar un error a consola de que no se puede asignar un peso negativo o en cero.
-             * */
-            throw new IllegalArgumentException( "El peso debe ser mayor a cero.");
+        this.peso = validarPeso(peso);
+    }
+
+    private static int validarEdad(int edad) {
+        if (edad <= 0) {
+            throw new IllegalArgumentException("La edad debe ser mayor que cero.");
         }
-        this.peso = peso;
+        return edad;
+    }
+
+    private static double validarPeso(double peso) {
+        if (!Double.isFinite(peso) || peso <= 0) {
+            throw new IllegalArgumentException("El peso debe ser finito y mayor que cero.");
+        }
+        return peso;
     }
 
     /**
@@ -109,16 +121,30 @@ public abstract class Mascota {
      * Cambia el dueño.
      * @param dueno nuevo dueño
      */
-    public void setDueno(Dueno dueno) {
-        this.dueno = dueno;
-    }
-
     /**
      * Devuelve el historial.
-     * @return historial de la mascota
+     * @return historial de la mascota o null después de su baja
      */
     public HistorialClinico getHistorial() {
         return historial;
+    }
+
+    /**
+     * Crea un historial vacío al volver a registrar una mascota dada de baja.
+     * Conserva el historial existente si la mascota ya tiene uno.
+     */
+    public void crearHistorial() {
+        if (historial == null) {
+            historial = new HistorialClinico();
+        }
+    }
+
+    /**
+     * Retira el historial de la mascota durante su baja de la clínica.
+     */
+    public void eliminarHistorial() {
+        historial = null;
+        // EL historial NO se elimina de memoria, puede ser recuperado.
     }
 
     /**
@@ -133,7 +159,7 @@ public abstract class Mascota {
      */
     @Override
     public String toString() {
-        return "Mascota{nombre='" + nombre + "', edad=" + edad + ", peso=" + peso
-                + ", dueno=" + (dueno == null ? null : dueno.getNombre()) + "}";
+        return "Nombre: " + nombre + " | Edad: " + edad + " | Peso: " + peso
+                + " | Dueño: " + dueno.getNombre() + " " + dueno.getApellido();
     }
 }

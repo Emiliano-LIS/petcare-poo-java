@@ -7,13 +7,17 @@ package modelo.clinica;
  * Pertenece a la clínica y se da de baja con ella.
  */
 public class Consultorio {
-    private int numero;
+    private final int numero;
 
     /**
      * Crea un consultorio numerado.
      * @param numero número del consultorio
      */
-    public Consultorio(int numero) {
+    Consultorio(int numero) {
+        if (numero <= 0) {
+            throw new IllegalArgumentException(
+                    "El número del consultorio debe ser mayor que cero.");
+        }
         this.numero = numero;
     }
 
@@ -29,16 +33,12 @@ public class Consultorio {
      * Cambia el número.
      * @param numero nuevo número
      */
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
     /**
      * Resume los datos del consultorio.
      * @return datos del consultorio en texto
      */
     @Override
     public String toString() {
-        return "Consultorio{numero=" + numero + "}";
+        return "Consultorio " + numero;
     }
 }

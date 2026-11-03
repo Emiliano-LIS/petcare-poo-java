@@ -1,6 +1,7 @@
 package modelo.personas;
 
 import modelo.clinica.Cita;
+import modelo.clinica.Clinica;
 
 /**
  * Recepcionista que registra las citas.
@@ -22,7 +23,7 @@ public class Recepcionista extends Persona {
     public Recepcionista(String nombre, String apellido, String telefono, String correo,
             String turno) {
         super(nombre, apellido, telefono, correo);
-        this.turno = turno;
+        this.turno = validarTexto(turno, "El turno");
     }
 
     /**
@@ -38,14 +39,20 @@ public class Recepcionista extends Persona {
      * @param turno nuevo turno
      */
     public void setTurno(String turno) {
-        this.turno = turno;
+        this.turno = validarTexto(turno, "El turno");
     }
 
     /**
-     * Registra una cita.
+     * Registra una cita en la clínica, respetando las comprobaciones de su agenda.
      * @param cita cita a registrar
+     * @param clinica clínica que administra la agenda
      */
-    public void registrarCita(Cita cita) {
+    public void registrarCita(Cita cita, Clinica clinica) {
+        if (cita == null || clinica == null) {
+            System.out.println("La cita y la clínica son obligatorias.");
+            return;
+        }
+        clinica.agendarCita(cita);
     }
 
     /**
@@ -54,8 +61,7 @@ public class Recepcionista extends Persona {
      */
     @Override
     public String describirRol() {
-        System.out.println("El rol recepcionista es una persona responsable gestionar el registro y agenda de citas.");
-        return null;
+        return "El recepcionista es responsable de gestionar el registro y la agenda de citas.";
     }
 
     /**
@@ -64,6 +70,6 @@ public class Recepcionista extends Persona {
      */
     @Override
     public String toString() {
-        return "Recepcionista{persona=" + super.toString() + ", turno='" + turno + "'}";
+        return "Recepcionista | " + super.toString() + " | Turno: " + turno;
     }
 }

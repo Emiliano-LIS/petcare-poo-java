@@ -1,8 +1,10 @@
 package modelo.comprobante;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import modelo.clinica.Cita;
+import modelo.clinica.EstadoCita;
 
 /**
  * Comprobante de cobro de una cita.
@@ -11,16 +13,37 @@ import modelo.clinica.Cita;
  * Regla 6: el cobro debe consultarse por mascota y veterinario.
  */
 public class Comprobante {
-    private String folio;
-    private BigDecimal total;
-    private Cita cita;
+    // static comparte la numeración entre los comprobantes durante la ejecución.
+    private static int contadorComprobantes = 0;
+    private final String folio;
+    private final BigDecimal total;
+    private final Cita cita;
 
     /**
-     * Crea el comprobante de una cita.
-     * @param cita cita a cobrar
+     * Crea el comprobante y conserva el costo calculado al momento de emitirlo.
+     * @param cita cita atendida a cobrar
+     * @throws IllegalArgumentException si falta la cita, el servicio o el costo es inválido
+     * @throws IllegalStateException si la cita no está atendida
      */
     public Comprobante(Cita cita) {
+        if (cita == null) {
+            throw new IllegalArgumentException("La cita es obligatoria.");
+        }
+        if (cita.getEstado() != EstadoCita.ATENDIDA) {
+            throw new IllegalStateException("Solo se pueden cobrar citas atendidas.");
+        }
+        if (cita.getServicio() == null) {
+            throw new IllegalArgumentException("La cita debe tener un servicio.");
+        }
+
+        BigDecimal costo = cita.getServicio().calcularCosto();
+        if (costo == null || costo.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("El costo debe ser un importe no negativo.");
+        }
+
         this.cita = cita;
+        this.total = costo.setScale(2, RoundingMode.HALF_UP);
+        this.folio = "COMP-" + (++contadorComprobantes);
     }
 
     /**
@@ -32,27 +55,11 @@ public class Comprobante {
     }
 
     /**
-     * Cambia el folio.
-     * @param folio nuevo folio
-     */
-    public void setFolio(String folio) {
-        this.folio = folio;
-    }
-
-    /**
      * Devuelve el total.
      * @return total del cobro
      */
     public BigDecimal getTotal() {
         return total;
-    }
-
-    /**
-     * Cambia el total.
-     * @param total importe no negativo
-     */
-    public void setTotal(BigDecimal total) {
-        this.total = total;
     }
 
     /**
@@ -64,19 +71,15 @@ public class Comprobante {
     }
 
     /**
-     * Cambia la cita.
-     * @param cita cita del cobro
-     */
-    public void setCita(Cita cita) {
-        this.cita = cita;
-    }
-
-    /**
      * Prepara el texto del comprobante.
      * @return comprobante en texto
      */
     public String imprimir() {
-        return null;
+        return "=== Comprobante de cobro ===\n"
+                + "Folio: " + folio + "\n"
+                + "Cita: " + cita.getFolio() + "\n"
+                // Se uso toPlainString dado que es BigDecimal (Desiciones del pasado :>)
+                + "Total: " + total.toPlainString();
     }
 
     /**
@@ -85,7 +88,7 @@ public class Comprobante {
      */
     @Override
     public String toString() {
-        return "Comprobante{folio='" + folio + "', total=" + total
-                + ", cita=" + (cita == null ? null : cita.getFolio()) + "}";
+        return "Comprobante: " + folio + " | Cita: " + cita.getFolio()
+                + " | Total: $" + total.toPlainString();
     }
 }

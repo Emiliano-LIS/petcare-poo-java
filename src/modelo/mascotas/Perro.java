@@ -21,8 +21,8 @@ public class Perro extends Mascota {
     public Perro(String nombre, int edad, double peso, Dueno dueno, String raza,
             String nivelEnergia) {
         super(nombre, edad, peso, dueno);
-        this.raza = raza;
-        this.nivelEnergia = nivelEnergia;
+        this.raza = validarTexto(raza, "La raza");
+        this.nivelEnergia = validarTexto(nivelEnergia, "El nivel de energía");
     }
 
     /**
@@ -38,7 +38,7 @@ public class Perro extends Mascota {
      * @param raza nueva raza
      */
     public void setRaza(String raza) {
-        this.raza = raza;
+        this.raza = validarTexto(raza, "La raza");
     }
 
     /**
@@ -54,7 +54,7 @@ public class Perro extends Mascota {
      * @param nivelEnergia nuevo nivel
      */
     public void setNivelEnergia(String nivelEnergia) {
-        this.nivelEnergia = nivelEnergia;
+        this.nivelEnergia = validarTexto(nivelEnergia, "El nivel de energía");
     }
 
     /**
@@ -63,7 +63,7 @@ public class Perro extends Mascota {
      */
     @Override
     public String hacerSonido() {
-        return null;
+        return "Guau";
     }
 
     /**
@@ -72,7 +72,7 @@ public class Perro extends Mascota {
      */
     @Override
     public String toString() {
-        return "Perro{mascota=" + super.toString() + ", raza='" + raza
-                + "', nivelEnergia='" + nivelEnergia + "'}";
+        return "Perro | " + super.toString() + " | Raza: " + raza
+                + " | Nivel de energía: " + nivelEnergia;
     }
 }

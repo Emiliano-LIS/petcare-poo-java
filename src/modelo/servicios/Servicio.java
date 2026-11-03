@@ -1,6 +1,7 @@
 package modelo.servicios;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Base de los servicios de la clínica.
@@ -16,7 +17,7 @@ public abstract class Servicio implements Facturable {
      * @param nombre nombre del servicio
      */
     public Servicio(String nombre) {
-        this.nombre = nombre;
+        this.nombre = validarNombre(nombre);
     }
 
     /**
@@ -32,7 +33,28 @@ public abstract class Servicio implements Facturable {
      * @param nombre nuevo nombre
      */
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = validarNombre(nombre);
+    }
+
+    private static String validarNombre(String nombre) {
+        // Validamos que existe y que no sea ""
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre del servicio es obligatorio.");
+        }
+        return nombre.trim();
+    }
+
+    // Acceso de paquete: estas validaciones se comparten solo entre los servicios.
+    static BigDecimal validarImporte(BigDecimal importe, String campo) {
+        if (importe == null || importe.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(campo + " debe ser un importe no negativo.");
+        }
+        return importe;
+    }
+
+    // Para evitar decimales demasiados largos con BigDecimal
+    static BigDecimal redondearCosto(BigDecimal costo) {
+        return costo.setScale(2, RoundingMode.HALF_UP);
     }
 
     /**
@@ -41,6 +63,6 @@ public abstract class Servicio implements Facturable {
      */
     @Override
     public String toString() {
-        return "Servicio{nombre='" + nombre + "'}";
+        return "Servicio: " + nombre;
     }
 }

@@ -1,3 +1,8 @@
+*.class
+*.iml
+.idea/
+.~lock.*#
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/

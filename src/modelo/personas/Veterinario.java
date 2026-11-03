@@ -7,7 +7,7 @@ package modelo.personas;
  * Regla 6: sus cobros deben poder consultarse.
  */
 public class Veterinario extends Persona {
-    private String cedulaProfesional;
+    private final String cedulaProfesional;
     private String especialidad;
 
     /**
@@ -22,8 +22,8 @@ public class Veterinario extends Persona {
     public Veterinario(String nombre, String apellido, String telefono, String correo,
             String cedulaProfesional, String especialidad) {
         super(nombre, apellido, telefono, correo);
-        this.cedulaProfesional = cedulaProfesional;
-        this.especialidad = especialidad;
+        this.cedulaProfesional = validarTexto(cedulaProfesional, "La cédula profesional");
+        this.especialidad = validarTexto(especialidad, "La especialidad");
     }
 
     /**
@@ -38,10 +38,6 @@ public class Veterinario extends Persona {
      * Cambia la cédula profesional.
      * @param cedulaProfesional nueva cédula
      */
-    public void setCedulaProfesional(String cedulaProfesional) {
-        this.cedulaProfesional = cedulaProfesional;
-    }
-
     /**
      * Devuelve la especialidad.
      * @return especialidad del veterinario
@@ -55,7 +51,7 @@ public class Veterinario extends Persona {
      * @param especialidad nueva especialidad
      */
     public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
+        this.especialidad = validarTexto(especialidad, "La especialidad");
     }
 
     /**
@@ -64,8 +60,7 @@ public class Veterinario extends Persona {
      */
     @Override
     public String describirRol() {
-        System.out.println("El rol veterinario es una persona responsable de atender los servicios");
-        return null;
+        return "El veterinario es responsable de atender los servicios.";
     }
 
     /**
@@ -74,8 +69,8 @@ public class Veterinario extends Persona {
      */
     @Override
     public String toString() {
-        return "Veterinario{persona=" + super.toString()
-                + ", cedulaProfesional='" + cedulaProfesional
-                + "', especialidad='" + especialidad + "'}";
+        return "Veterinario | " + super.toString()
+                + " | Cédula profesional: " + cedulaProfesional
+                + " | Especialidad: " + especialidad;
     }
 }
